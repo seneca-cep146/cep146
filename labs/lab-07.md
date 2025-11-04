@@ -329,14 +329,14 @@ This marks the current commit (HEAD) as having the bug.
 #### Step 4: Tell Git that 7 commits ago was GOOD (no bug)
 
 ```bash
-git bisect good HEAD~7
+git bisect good HEAD~6
 ```
 
 This marks the first commit as working correctly.
 
 Git will now say something like:
 ```
-Bisecting: 3 revisions left to test after this
+Bisecting: 2 revisions left to test after this
 [commit hash] Commit 4: Add yield information
 ```
 
