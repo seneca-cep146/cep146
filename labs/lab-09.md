@@ -3,89 +3,169 @@
 
 ## Exercise 1: Your First Prompts
 
-### Individual Exercise
-Try writing prompts for these scenarios. Test them with an AI tool if available:
+ **Scenario 1:**  Writing a polite email declining a party invitation
 
-1. **Scenario:** You want to write a polite email declining a party invitation
-   - Write a poor prompt
-   - Write a good prompt
-   - Compare the potential results
+Poor Prompt:
 
-2. **Scenario:** You need help understanding photosynthesis for a presentation
-   - Create a prompt that specifies your audience (children, adults, experts)
-   - Include the format you want (bullet points, story, diagram description)
+Write an email saying I can’t go to a party.
 
-3. **Scenario:** You want recipe suggestions based on ingredients you have at home
-   - Write a prompt that includes your ingredients, dietary restrictions, and cooking skill level
+Good Prompt:
 
-### Pair Discussion
-Share your prompts with a partner and discuss:
-- Which prompts are clearer?
-- What information might be missing?
-- How could you improve them?
+Write a polite and friendly email declining a party invitation.
+Mention that I appreciate being invited but have another commitment.
+Keep the tone warm and respectful, and end with a kind wish for the event.
 
----
+Comparison:
+
+The poor prompt gives very little context, so the AI might generate a short or rude message (e.g., “I can’t come. Sorry.”).
+
+The good prompt gives clear instructions about tone, purpose, and content, which helps the AI produce a polite, natural, and appropriate email.
+
+**Scenario 2:** Understanding photosynthesis for a presentation
+
+Prompt for Children:
+
+Explain photosynthesis in simple terms for a group of 10-year-old students.
+Use bullet points and include a short, fun story about how plants make food from sunlight.
+
+Prompt for Adults:
+
+Summarize how photosynthesis works for an adult audience using bullet points.
+Include important terms like sunlight, chlorophyll, carbon dioxide, and oxygen.
+
+Prompt for Experts:
+
+Provide a detailed scientific explanation of photosynthesis, including the chemical equations and energy transfer process.
+Write it as a paragraph suitable for a biology presentation.
+
+**Scenario 3:** Recipe suggestions based on ingredients you have at home
+
+Prompt:
+
+I have chicken, spinach, garlic, rice, and soy sauce at home.
+I prefer healthy, low-fat meals and I’m a beginner cook.
+Suggest 3 easy dinner recipes with step-by-step instructions.
+
+Explanation:
+This prompt includes ingredients, dietary preference, and cooking skill level, so the AI can provide realistic and personalized recipes instead of random suggestions.
+
+## Pair Discussion:
+
+The clearer prompts provided more specific, useful, and natural results.
+
+Missing information in poor prompts included tone, audience, purpose, and format.
+
+To improve prompts, I can always add context, target audience, and expected output format.
 
 ## Exercise 2: Problem-Solving with AI
 
-### Group Exercise (2 people per group)
+**Scenario A:** Event Planning
 
-Choose one of these real-world scenarios and develop a comprehensive prompting strategy:
+(Planning a company team-building event for 20 people with a $500 budget)
 
-#### Scenario A: Event Planning
-You're planning a company team-building event for 20 people with a $500 budget.
-- Create a series of prompts to help you plan everything from venue to activities
-- Consider using chain of thought and iterative refinement
-- Think about what constraints and requirements you need to specify
+Step 1 – Start Broad:
 
-#### Scenario B: Learning New Skills
-You want to learn basic photography to improve your social media posts.
-- Design prompts that would help you learn progressively
-- Consider different formats (tutorials, checklists, practice exercises)
-- Think about how to get personalized advice based on your current skill level
+Suggest fun and affordable team-building event ideas for 20 people with a total budget of $500.
 
-#### Scenario C: Home Improvement Decision
-You need to choose between different options for updating your living room on a budget.
-- Create prompts that help you evaluate options
-- Consider how to get advice tailored to your specific situation
-- Think about how to get both creative ideas and practical guidance
+Step 2 – Focus on Venue Options:
 
-### Group Discussion
-Each group presents their prompting strategy and explains their reasoning.
+Give me 5 possible venues in Toronto for a 20-person team-building event that cost under $500 total. Include both indoor and outdoor options.
 
----
-# Lab Rubric
+Step 3 – Plan Activities:
 
-**Total Points: 2 marks**
+Suggest team-building activities that are fun, promote teamwork, and don’t need expensive equipment.
 
-For this lab to be considered complete, students must successfully demonstrate understanding of effective AI prompting techniques through individual practice, collaborative analysis, and group problem-solving across two comprehensive exercises.
+Step 4 – Refine the Schedule:
 
-## Detailed Expectations:
+Create a one-day event schedule (9 AM to 5 PM) including activities, breaks, and meals that keep total costs under $500.
 
-### Exercise 1 Requirements (Your First Prompts):
-- **Individual Component:** Successfully created both poor and good prompts for all 3 scenarios (email declining invitation, photosynthesis explanation, recipe suggestions)
-- Demonstrated clear understanding of prompt quality differences through comparison
-- Included specific details in good prompts: audience specification, format requirements, constraints (dietary restrictions, cooking skill level)
-- **Pair Discussion Component:** Actively participated in partner discussion with constructive feedback on prompt clarity and completeness
-- Provided specific suggestions for prompt improvement based on missing information or unclear elements
+Step 5 – Final Touch:
 
-### Exercise 2 Requirements (Problem-Solving with AI):
-- **Group Component:** Selected one scenario (Event Planning, Learning Photography, or Home Improvement) and developed comprehensive prompting strategy
-- Demonstrated understanding of advanced prompting techniques: chain of thought reasoning, iterative refinement, constraint specification
-- Created series of related prompts showing progression and strategic thinking
-- Considered multiple aspects: requirements, constraints, personalization, format preferences
-- **Group Presentation:** Clearly presented prompting strategy with logical reasoning and explanation of approach
-- Participated constructively in discussion of other groups' strategies
+Write an email invitation for staff, explaining the event details and encouraging participation in a positive tone.
 
-### Overall Engagement Requirements:
-- Active participation in both individual work and collaborative discussions
-- Demonstrated understanding of prompting principles through practical application
-- Showed ability to analyze and improve prompting effectiveness
-- Evidence of thoughtful consideration of AI interaction strategies
+Reasoning:
+This strategy uses iterative prompting — starting broad, then refining step by step.
+It ensures the event stays organized, affordable, and engaging.
 
-## Assessment Rubric:
+**Scenario B:** Learning New Skills
 
-| Criteria | Poor - 0 marks | Fair - 1 mark | Good - 2 marks |
-|---|---|---|---|
-| Lab Completion | Failed to complete individual prompting exercises or did not participate in group work, missing evidence of understanding basic prompting concepts | Successfully completed individual prompting practice (Exercise 1) OR group problem-solving strategy (Exercise 2), but discussions and reflections were either non-existent or lacked depth (superficial analysis, vague feedback, or minimal participation in collaborative elements) | Successfully completed both individual prompting practice (Exercise 1) with clear poor/good prompt comparisons AND group problem-solving strategy (Exercise 2) with comprehensive approach, plus demonstrated thoughtful engagement in discussions showing deep understanding of effective AI prompting principles |
+(Learning basic photography to improve social media posts)
 
+Step 1 – Assess Current Skill Level:
+
+I’m a beginner at photography and I mostly use my smartphone.
+Explain the basic camera settings — ISO, aperture, and shutter speed — in simple terms with examples.
+
+Step 2 – Learn Progressively:
+
+Create a 2-week photography learning plan with short daily lessons.
+Each day should include a concept and a small practice activity for improving my social media photos.
+
+Step 3 – Learn Through Different Formats:
+
+Give me a beginner-friendly tutorial explaining how to take better portrait photos using natural light.
+Then, provide a checklist I can follow while taking pictures.
+
+Step 4 – Personalized Advice:
+
+Based on my current level, give me 5 tips to improve my photo composition and lighting when using my phone indoors.
+
+Step 5 – Practice Exercise:
+
+Create 3 fun photography challenges I can do this weekend to practice framing, lighting, and focus.
+
+Reasoning:
+These prompts use progressive learning — from understanding basics → structured lessons → practice → personalized feedback.
+They mix formats (tutorials, checklists, exercises) for better engagement and improvement.
+
+**Scenario C:** Home Improvement Decision
+
+(Choosing how to update a living room on a budget)
+
+Step 1 – Explore Options:
+
+I want to update my living room with a small budget of $300.
+Suggest creative and affordable design ideas that can make it look more modern and cozy.
+
+Step 2 – Compare Options:
+
+Give me 3 different design styles (modern, cozy, minimalist) for a small living room.
+Describe the color themes, furniture ideas, and decoration tips for each style.
+
+Step 3 – Evaluate Practicality:
+
+Compare the cost, effort, and overall look of each design style so I can decide which one fits my space and budget best.
+
+Step 4 – Personalized Advice:
+
+My living room has limited natural light. Suggest lighting ideas, color choices, and layout tips that can make it look brighter and more open.
+
+Step 5 – Creative Guidance:
+
+Suggest some DIY decoration ideas using items I might already have at home.
+
+**Reasoning:**
+
+These prompts help combine creative ideas with practical advice, so I can make budget-friendly decisions that still look stylish and personal.
+
+## Group Discussion Summary
+
+Chosen Scenarios: Event Planning, Learning Photography, and Home Improvement.
+
+Prompting Strategies: Each scenario started with a broad question, then refined step by step with more details.
+
+Reasoning:
+
+Detailed prompts help the AI understand context.
+
+Iterative prompting leads to more accurate and practical results.
+
+Specifying format (like checklist, story, or table) improves clarity.
+
+Improvement:
+
+Add constraints (budget, skill level, time).
+
+Include audience or purpose.
+
+Ask for comparison or evaluation for decision-making.
