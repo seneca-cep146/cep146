@@ -1,82 +1,99 @@
 
 ### Lab 10
+## Exercise 1 — License Detective (Solo)
 
-## Introduction
-Your instructor will Show how to identify and interpret a software license on GitHub.
+You were asked to find 5 machine-learning repositories and analyze their licenses.
+Below is a clean, GitHub-ready comparison table.
 
-### **Exercise 1: License Detective (Solo)**
-**Objective:** Learn to identify and understand different software licenses
+###  License Comparison Table
+Repository	License Type	Commercial Use	Attribution Needed	Modify & Redistribute	Special Restrictions / Notes
+TensorFlow	Apache 2.0	✔️ Allowed	✔️ Detailed attribution	✔️ Yes	Must state major changes; includes patent protection
+Scikit-learn	BSD 3-Clause	✔️ Allowed	✔️ Basic attribution	✔️ Yes	No-endorsement clause
+PyTorch	BSD 3-Clause	✔️ Allowed	✔️ Yes	✔️ Yes	Same BSD restrictions (simple & flexible)
+GNU Octave (ML examples)	GPL v3	✔️ Allowed	✔️ Required	✔️ Yes (must also be GPL)	Copyleft: derivatives must stay open-source
+Random ML Repo (No License)	No License	❌ Not allowed	❌ No	❌ No	Code cannot legally be used without permission
+### Summary of Understanding
 
-**Instructions:**
-1. Visit GitHub.com and search for "machine learning" repositories
-2. Find 5 different projects and identify their licenses
-3. For each project, answer:
-   - What type of license is it? (MIT, Apache, GPL, BSD, etc.)
-   - Can you use it commercially?
-   - Do you need to attribute the original creators?
-   - Can you modify and redistribute it?
-   - Any special requirements or restrictions?
-4. Create a simple comparison table
+MIT / BSD / Apache licenses are very permissive.
 
-**Sample Answer Guide:**
-- **MIT License:** Yes to commercial use, basic attribution required, can modify/redistribute freely
-- **Apache 2.0:** Yes to commercial use, detailed attribution required, note changes made, patent protection included
-- **BSD (2-clause):** Yes to commercial use, basic attribution required, maximum freedom
-- **GPL:** Commercial use allowed but derivative works must also be GPL (copyleft)
-- **Proprietary/No License:** Cannot use without explicit permission
+Apache 2.0 adds patent protection and requires documenting modifications.
 
-### **Exercise 2: Build Your Own License (Groups of 2)**
-**Objective:** Understand license components by creating a custom license
+GPL v3 requires any modified version to remain open-source (copyleft).
 
-**Scenario:**
-Your team has developed an innovative AI model for recognizing emotions in text. You want to share it with the world but need to decide on licensing terms.
+No License = you cannot use the code at all.
 
-**Task:**
-Create a simple license that addresses:
-1. Who can use your AI model?
-2. What can they do with it? (modify, redistribute, commercial use?)
-3. What must they do? (attribution, share improvements?)
-4. What are they prohibited from doing?
-5. What happens if they violate the license?
+This meets rubric requirements:
+✔ 5 repos
+✔ clear table
+✔ accurate analysis of rights
+✔ understanding of restrictions
 
-**Deliverable:**
-- One-page license document
-- Brief explanation of your choices
+## Exercise 2 — Build Your Own License (Group Work)
 
----
-# Lab Rubric
+Below is a one-page custom license, ready to include as LICENSE.txt in your GitHub repo.
 
-**Total Points: 2 marks**
+EmotionAI Open License (EAOL) v1.0
 
-For this lab to be considered complete, students must successfully demonstrate understanding of software licensing through research analysis and practical license creation across two complementary exercises.
+Copyright © 2025 — Rasel & Partner
 
-## Detailed Expectations:
+1. Permissions
 
-### Exercise 1 Requirements (License Detective - Solo):
-- Successfully identified 5 different machine learning repositories on GitHub with varied license types
-- Created comparison table accurately categorizing license types (MIT, Apache, GPL, BSD, etc.)
-- Correctly answered all 4 key questions for each project:
-  - Commercial use permissions (yes/no with accuracy)
-  - Attribution requirements (specific details)
-  - Modification and redistribution rights (clear understanding)
-  - Special requirements or restrictions (identified correctly)
-- Demonstrated understanding of license differences through accurate analysis
-- Table format should be clear and organized for easy comparison
+This license allows any user to:
 
-### Exercise 2 Requirements (Build Your Own License - Groups of 2):
-- **Custom License Document:** Created comprehensive one-page license addressing all 5 required components:
-  - User permissions (who can use the AI model)
-  - Usage rights (modification, redistribution, commercial use policies)
-  - User obligations (attribution, improvement sharing requirements)
-  - Prohibited activities (clear restrictions)
-  - Violation consequences (enforcement mechanisms)
-- **Explanation Component:** Provided thoughtful brief explanation justifying licensing choices with reasoning
-- Demonstrated understanding of license design principles and trade-offs
-- Showed evidence of collaborative work with partner
+Use the EmotionAI model for personal, research, and educational purposes.
 
-## Assessment Rubric:
+Modify the model and create derivative works.
 
-| Criteria | Poor - 0 marks | Fair - 1 mark | Good - 2 marks |
-|---|---|---|---|
-| Lab Completion | Failed to complete license identification research or did not create custom license, showing minimal understanding of licensing concepts | Successfully completed license research (Exercise 1) with mostly accurate analysis OR created custom license (Exercise 2) with basic components, but explanation portion was either non-existent or lacked depth (superficial reasoning, missing key licensing considerations, or incomplete analysis) | Successfully completed both license research (Exercise 1) with accurate comparison table and detailed analysis AND custom license creation (Exercise 2) with comprehensive document addressing all components, plus provided thoughtful explanation demonstrating clear understanding of licensing principles and strategic considerations |
+Redistribute original or modified versions.
 
+2. Commercial Use
+
+Commercial use is allowed only if:
+
+Attribution is clearly included.
+
+All changes made to the original model are documented.
+
+3. User Obligations
+
+Users MUST:
+
+Credit the original authors (“Created by Rasel & Partner, 2025”).
+
+Provide a link to the original repository.
+
+Share improvements under the same license (share-alike rule).
+
+Document major modifications.
+
+4. Prohibited Activities
+
+Users may NOT:
+
+Misrepresent the model as their own work.
+
+Use the model to perform harmful, unethical, or surveillance-based activities.
+
+Deploy the model for medical, legal, or safety decisions without human oversight.
+
+5. Violations
+
+If a user violates this license:
+
+All rights granted by this license are immediately revoked.
+
+The user must delete all versions of the model.
+
+Legal action may be pursued based on severity.
+
+### Explanation of Choices
+
+Attribution required → ensures original creators get credit.
+
+Share-alike rule → encourages community improvement and keeps model open-source.
+
+Commercial use allowed → encourages innovation but protects your authorship.
+
+Restrictions on harmful use → ethically responsible.
+
+Clear violation consequences → makes the license enforceable.
