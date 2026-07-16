@@ -27,7 +27,7 @@
 * [Project: Software Development Current Event Topic](project/project-software-development-2026.md)
 
 ### Project 2
-* [Project: Artificial Intelligence Current Event Topics](project/project-ai.md)
+* [Project: Artificial Intelligence Current Event Topics](project/project-ai-2026.md)
 
 ---
 ## Reference Material
