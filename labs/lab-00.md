@@ -3,7 +3,7 @@ title: "Lab 0: Prove Your Workshop Works"
 subtitle: "Verifying Your Xcode / Visual Studio Installation with a Hello World Program"
 ---
 
-# Lab 1: Prove Your Workshop Works
+# Lab 0: Prove Your Workshop Works
 
 **Estimated time:** 20–30 minutes
 **Prerequisite:** You must have already completed the setup notes ("Setting Up Your Coding Workshop") for your operating system.
