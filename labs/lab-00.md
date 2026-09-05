@@ -79,9 +79,7 @@ By the end of this lab, you will be able to:
 
 ---
 
-## Part C — Optional: Run It Again in VS Code
-
-*Only attempt this if you completed the optional VS Code section of the setup notes, and only after finishing Part A or B above.*
+## Part C — Run It Again in VS Code
 
 1. Open VS Code and open the folder containing your `hello.c` or `hello.cpp` file (create one if you don't have it, using the same code as above).
 2. Open the built-in terminal: **Terminal → New Terminal**.
