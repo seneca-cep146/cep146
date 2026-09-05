@@ -1,10 +1,11 @@
-# Coursename
+# CEP146 Essential Tooling for Programmer 
 
 * [Course Addenda](https://syl.senecapolytechnic.ca/)
 * [Course Notes](https://seneca-ictoer.github.io/essential-tooling-for-programmers/)
 
 ## Labs
 
+* [Lab 0](labs/lab-00.md)
 * [Lab 1](labs/lab-01.md)
 * [Lab 2](labs/lab-02.md)
 * [Lab 3](labs/lab-03.md)
