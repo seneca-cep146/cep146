@@ -71,3 +71,8 @@ Now that your computer has a compiler, we can set up your editor.
 5. Search for **"C/C++"** (make sure the publisher is Microsoft) and click **Install**.
 
 You are now ready to write and run code! Proceed to Lab 0.
+
+## 6. Additional Reference
+
+Seneca Campus Software installation guide. 
+https://seneca-ictoer.github.io/GettingStarted/software#software
