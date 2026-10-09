@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How AI Writes Text</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#F3F5F8; --ink:#0F1B2A; --muted:#4A5868; --line:#D5DCE5; --soft:#6B7785;
+    --blue:#1D4F9E; --blue-bg:#DDE8F8; --blue-bd:#9DB9E6; --blue-bar:#7C9CCB;
+    --or:#8F3F05; --or-bg:#FDE7D3; --or-bd:#F0B184; --or-bar:#C2560F; --or-dark:#A84A0C;
+    --ghost-bd:#8C98A6;
+    --sans:'IBM Plex Sans', 'Segoe UI', 'Helvetica Neue', system-ui, sans-serif;
+    --mono:'IBM Plex Mono', Consolas, 'Courier New', monospace;
+  }
+  html,body{margin:0;height:100%;background:#0B1420;overflow:hidden}
+  #stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%);
+    box-sizing:border-box;background:var(--ground);color:var(--ink);font-family:var(--sans);
+    padding:24px 32px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+  .top{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;gap:14px}
+  .header{height:52px;flex:none;display:flex;align-items:center;justify-content:space-between}
+  .h-title{font-size:26px;font-weight:700;letter-spacing:-.01em}
+  .pill{font-size:15px;font-weight:600;padding:6px 14px;border-radius:999px;background:var(--ink);color:#fff}
+  .counters{display:flex;gap:10px}
+  .counter{display:flex;flex-direction:column;align-items:flex-end;padding:4px 14px;border-radius:10px;min-width:116px;box-sizing:border-box;border:2px solid}
+  .counter .lbl{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .counter .num{font-size:26px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+  .c-in{background:var(--blue-bg);border-color:var(--blue-bd);color:var(--blue)}
+  .c-out{background:var(--or-bg);border-color:var(--or-bd);color:var(--or)}
+  .c-tot{background:#fff;border-color:var(--ink);min-width:96px}
+  .prompt-row{height:60px;flex:none;display:flex;align-items:center;gap:16px}
+  .prompt-lbl{width:92px;font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .prompt-box{flex:1;height:60px;box-sizing:border-box;border:2px solid #C9D2DD;border-radius:12px;background:#fff;
+    display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+  .prompt-text{font-size:26px;font-weight:500;white-space:pre}
+  .placeholder{color:var(--soft)}
+  .caret{color:var(--blue)}
+  .sent{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;color:var(--blue)}
+  .panels{flex:1;min-height:0;display:flex;align-items:stretch}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-sizing:border-box;display:flex;flex-direction:column}
+  .card-title{font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .left{flex:1 1 0;min-width:0;gap:14px}
+  .chips{flex:1;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}
+  .chip{display:inline-flex;align-items:center;height:44px;box-sizing:border-box;padding:0 14px;border-radius:10px;border:2px solid;
+    font-family:var(--mono);font-size:22px;font-weight:600}
+  .chip.in{background:var(--blue-bg);border-color:var(--blue-bd);color:var(--blue)}
+  .chip.out{background:var(--or-bg);border-color:var(--or-bd);color:var(--or)}
+  .chip.ghost{background:#fff;border-style:dashed;border-color:var(--ghost-bd);color:var(--muted)}
+  .chip.stop{background:#EEF1F4;border-style:dashed;border-color:var(--ghost-bd);color:var(--muted)}
+  .legend{display:flex;gap:18px;font-size:14px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:8px}
+  .sw{width:14px;height:14px;border-radius:4px;border:2px solid;box-sizing:border-box}
+  .mid{width:190px;flex:none;display:flex;align-items:center;justify-content:center}
+  .model{width:112px;height:132px;box-sizing:border-box;margin:0 6px;border-radius:16px;border:3px solid #C9D2DD;background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+  .model.thinking{border-color:var(--or-bar);background:#FFF6EE}
+  .model .m1{font-size:16px;font-weight:700}
+  .model .m2{font-size:13px;font-weight:500;color:var(--muted)}
+  .right{width:470px;flex:none;gap:10px}
+  .right-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .small{font-size:13px;color:var(--muted)}
+  .wait{font-size:16px;color:var(--soft)}
+  .rows{display:flex;flex-direction:column;gap:8px}
+  .row{display:grid;grid-template-columns:118px minmax(0,1fr) 52px 74px;align-items:center;gap:12px;height:46px;padding:0 10px;border-radius:10px}
+  .row.win{background:var(--or-bg)}
+  .row .tok{font-family:var(--mono);font-size:21px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{height:14px;border-radius:7px;background:#E6EBF1;overflow:hidden}
+  .fill{height:14px;border-radius:7px;background:var(--blue-bar);width:0}
+  .row.win .fill{background:var(--or-bar)}
+  .pct{text-align:right;font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+  .badge{font-size:12px;font-weight:700;letter-spacing:.08em;text-align:center;padding:5px 0;border-radius:6px;background:var(--or-dark);color:#fff}
+  .loop{height:36px;flex:none;display:flex;align-items:center;justify-content:center;gap:10px;border-radius:10px;background:#E7ECF2;font-size:17px;font-weight:600}
+  .loop.landing{background:var(--or-bg)}
+  .caption{height:84px;flex:none;box-sizing:border-box;border-radius:14px;background:var(--ink);color:#fff;display:flex;align-items:center;
+    justify-content:center;text-align:center;padding:0 40px;font-size:25px;font-weight:500;line-height:1.3}
+  .controls{height:52px;flex:none;display:flex;align-items:center;gap:12px}
+  button{font-family:var(--sans);cursor:pointer}
+  button:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+  .btn{height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;font-size:16px;font-weight:600;padding:0 14px;
+    border:2px solid #C9D2DD;background:#fff;color:var(--ink)}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;min-width:112px}
+  .chapters{display:flex;gap:6px}
+  .chap{height:44px;border-radius:10px;border:2px solid #C9D2DD;background:#fff;color:var(--ink);font-size:14px;font-weight:600;padding:0 11px}
+  .chap.active{background:var(--ink);border-color:var(--ink);color:#fff}
+  #seek{flex:1;accent-color:var(--blue);height:44px;margin:0;cursor:pointer}
+  .time{width:92px;text-align:right;font-size:15px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+  .overlay{position:absolute;top:-24px;left:-32px;right:-32px;bottom:0;z-index:2;background:var(--ground);display:flex;flex-direction:column;align-items:center}
+  #titleLayer{justify-content:center;gap:18px}
+  .eyebrow{font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+  .big{font-size:68px;font-weight:700;letter-spacing:-.02em;line-height:1}
+  .sub{font-size:30px;font-weight:500;color:var(--muted)}
+  .flow{display:flex;align-items:center;gap:14px;margin-top:26px}
+  .flow-item{display:flex;align-items:center;gap:14px}
+  .flow-box{font-size:22px;font-weight:600;padding:12px 22px;border-radius:12px;border:2px solid}
+  #sumLayer{padding-top:10px;gap:22px}
+  .tiles{display:flex;align-items:center;gap:22px}
+  .tile{width:250px;box-sizing:border-box;padding:16px 24px;border-radius:16px;border:2px solid}
+  .tile .t1{font-size:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .tile .t2{font-size:68px;font-weight:700;line-height:1.05}
+  .tile .t3{font-size:15px;font-weight:500}
+  .op{font-size:48px;font-weight:700;color:var(--muted)}
+  .takeaways{display:flex;flex-direction:column;gap:10px;width:860px}
+  .take{display:flex;align-items:center;gap:14px;font-size:22px;font-weight:500}
+  .num-dot{width:34px;height:34px;flex:none;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700}
+  .note{font-size:14px;color:var(--muted);text-align:center}
+  body.record .controls{display:none}
+  noscript{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;font:20px sans-serif;z-index:9}
+</style>
+</head>
+<body>
+<noscript>This animation needs JavaScript. Please open it in Chrome, Edge, Firefox or Safari.</noscript>
+<div id="stage">
+  <div class="top">
+    <div class="header">
+      <div style="display:flex;align-items:center;gap:16px">
+        <div class="h-title">How AI Writes Text</div>
+        <div class="pill" id="stepLabel">Intro</div>
+      </div>
+      <div class="counters">
+        <div class="counter c-in"><div class="lbl">Input tokens</div><div class="num" id="inCount">0</div></div>
+        <div class="counter c-out"><div class="lbl">Output tokens</div><div class="num" id="outCount">0</div></div>
+        <div class="counter c-tot"><div class="lbl">Total</div><div class="num" id="totCount">0</div></div>
+      </div>
+    </div>
+
+    <div class="prompt-row">
+      <div class="prompt-lbl">Your prompt</div>
+      <div class="prompt-box" id="promptBox">
+        <div class="prompt-text"><span class="placeholder" id="ph">Ask the AI something…</span><span id="promptText"></span><span class="caret" id="caret">|</span></div>
+        <div class="sent" id="sent">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-2-7-8-1z"/></svg>
+          Sent to the AI
+        </div>
+      </div>
+    </div>
+
+    <div class="panels">
+      <div class="card left">
+        <div class="card-title">What the AI sees: tokens</div>
+        <div class="chips" id="chips"></div>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--blue-bg);border-color:var(--blue-bd)"></i>Your prompt = input tokens</span>
+          <span><i class="sw" style="background:var(--or-bg);border-color:var(--or-bd)"></i>AI's answer = output tokens</span>
+        </div>
+      </div>
+      <div class="mid">
+        <svg width="28" height="20" viewBox="0 0 28 20" fill="none" stroke="#6B7785" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10h22M17 3l7 7-7 7"/></svg>
+        <div class="model" id="model">
+          <svg width="56" height="48" viewBox="0 0 56 48" fill="none" aria-hidden="true">
+            <g stroke="#9AA6B4" stroke-width="1.5"><path d="M8 8L28 6M8 8L28 24M8 8L28 42M8 24L28 6M8 24L28 24M8 24L28 42M8 40L28 6M8 40L28 24M8 40L28 42M28 6L48 24M28 24L48 24M28 42L48 24"/></g>
+            <g fill="#1D4F9E"><circle cx="8" cy="8" r="5"/><circle cx="8" cy="24" r="5"/><circle cx="8" cy="40" r="5"/></g>
+            <g fill="#4A5868"><circle cx="28" cy="6" r="5"/><circle cx="28" cy="24" r="5"/><circle cx="28" cy="42" r="5"/></g>
+            <circle cx="48" cy="24" r="6" fill="#C2560F"/>
+          </svg>
+          <div class="m1">AI model</div>
+          <div class="m2" id="modelState">waiting</div>
+        </div>
+        <svg width="28" height="20" viewBox="0 0 28 20" fill="none" stroke="#6B7785" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10h22M17 3l7 7-7 7"/></svg>
+      </div>
+      <div class="card right">
+        <div class="right-head"><div class="card-title" id="barsTitle">Next-token guesses</div><div class="small">Top 4 of ~100,000</div></div>
+        <div class="wait" id="wait">Waiting for the prompt tokens…</div>
+        <div class="rows" id="rows"></div>
+      </div>
+    </div>
+
+    <div class="loop" id="loop">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A84A0C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>
+      The picked token is added to the text, then the loop repeats.
+    </div>
+
+    <div class="overlay" id="titleLayer">
+      <div class="eyebrow">AI fundamentals</div>
+      <div class="big">How AI writes text</div>
+      <div class="sub">One token at a time</div>
+      <div class="flow" id="flow"></div>
+    </div>
+
+    <div class="overlay" id="sumLayer">
+      <div style="font-size:46px;font-weight:700;letter-spacing:-.01em">The token bill</div>
+      <div class="tiles">
+        <div class="tile" id="tile1" style="background:var(--blue-bg);border-color:var(--blue-bd);color:var(--blue)"><div class="t1">Input tokens</div><div class="t2">5</div><div class="t3">your prompt</div></div>
+        <div class="op" id="plus">+</div>
+        <div class="tile" id="tile2" style="background:var(--or-bg);border-color:var(--or-bd);color:var(--or)"><div class="t1">Output tokens</div><div class="t2">7</div><div class="t3">the AI's answer</div></div>
+        <div class="op" id="equals">=</div>
+        <div class="tile" id="tile3" style="background:var(--ink);border-color:var(--ink);color:#fff"><div class="t1">Total tokens</div><div class="t2">12</div><div class="t3">used for this answer</div></div>
+      </div>
+      <div class="takeaways" id="takeaways"></div>
+      <div class="note" id="note">Simplified for teaching: real token splits and probabilities vary by model. Real models choose from a vocabulary of about 100,000 or more tokens.</div>
+    </div>
+  </div>
+
+  <div class="caption" id="caption"></div>
+
+  <div class="controls">
+    <button class="btn primary" id="playBtn" aria-label="Play or pause (Space)"></button>
+    <button class="btn" id="restartBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.34-5.66"/><path d="M4 4v5h5"/></svg>
+      Restart
+    </button>
+    <div class="chapters" id="chapters"></div>
+    <input type="range" id="seek" min="0" max="56000" step="10" value="0" aria-label="Jump to a point in the animation">
+    <div class="time" id="time">0:00 / 0:56</div>
+    <button class="btn" id="fsBtn" aria-label="Full screen (F)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---------- Script data (edit here) ----------
+  var PROMPT = 'The capital of Canada is';
+  var PTOK = ['The', 'capital', 'of', 'Canada', 'is'];
+  var STEPS = [
+    { tok: 'Ottawa',  c: [['Ottawa', 82], ['Toronto', 9], ['a', 4], ['located', 2]] },
+    { tok: ',',       c: [[',', 46], ['.', 38], ['which', 6], ['and', 4]] },
+    { tok: 'a',       c: [['a', 41], ['which', 28], ['located', 15], ['the', 8]] },
+    { tok: 'city',    c: [['city', 71], ['beautiful', 7], ['large', 6], ['major', 5]] },
+    { tok: 'in',      c: [['in', 63], ['located', 18], ['that', 8], ['on', 5]] },
+    { tok: 'Ontario', c: [['Ontario', 88], ['eastern', 6], ['the', 3], ['Canada', 2]] },
+    { tok: '.',       c: [['.', 79], [',', 12], ['near', 3], ['and', 2]] },
+    { tok: 'stop', end: true, c: [['[stop]', 91], ['It', 5], ['The', 2], ['Its', 1]] }
+  ];
+  var T0 = 20000, D0 = 4500, DN = 2800, SUMMARY = 44500, TOTAL = 56000;
+  var CAPTIONS = [
+    [0, 'Let’s watch an AI answer a simple question — one token at a time.'],
+    [5000, 'Step 1 — You type a prompt and send it to the AI.'],
+    [12000, 'Step 2 — The AI splits your text into tokens: small pieces of words.'],
+    [16000, 'Your prompt = 5 input tokens. Rule of thumb: 1 token ≈ ¾ of an English word.'],
+    [20000, 'Step 3 — The model gives every possible next token a probability score.'],
+    [22200, 'It picks a likely token — “Ottawa” — and adds it to the text.'],
+    [24500, 'Then it predicts again. Sometimes it is a close call: “,” 46% vs “.” 38%.'],
+    [27300, 'Every token the AI writes counts as 1 output token.'],
+    [32900, 'This loop is why AI answers appear word by word on your screen.'],
+    [41300, 'A special stop token tells the model the answer is finished.'],
+    [44500, 'The token bill: input tokens + output tokens.'],
+    [50000, 'Longer prompts and longer answers use more tokens — more cost and more time.']
+  ];
+  var CHAPTERS = [['Intro', 0], ['Prompt', 5000], ['Tokens', 12000], ['Predict', 20000], ['Token bill', 44500]];
+  var TAKEAWAYS = [
+    'Tokens in + tokens out = what AI services count for cost and limits.',
+    'Longer prompts and longer answers = more tokens.',
+    'With most AI services, output tokens cost more than input tokens.'
+  ];
+
+  // ---------- Helpers ----------
+  function $(id) { return document.getElementById(id); }
+  function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+  function ease(x) { return 1 - Math.pow(1 - x, 3); }
+  function f(T, at, dur) { return ease(clamp((T - at) / dur)); }
+  function stepStart(k) { return k === 0 ? T0 : T0 + D0 + (k - 1) * DN; }
+  function stepDur(k) { return k === 0 ? D0 : DN; }
+  var GEN_END = stepStart(STEPS.length);
+  function fmt(ms) { var s = Math.floor(ms / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function setText(e, t) { if (e.textContent !== t) e.textContent = t; }
+  var ARROW = '<svg width="28" height="20" viewBox="0 0 28 20" fill="none" stroke="#6B7785" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10h22M17 3l7 7-7 7"/></svg>';
+  var ICON_PLAY = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg> Play';
+  var ICON_PAUSE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx="1"/><rect x="14" y="4" width="5" height="16" rx="1"/></svg> Pause';
+
+  // ---------- Build DOM ----------
+  var chipsBox = $('chips');
+  var inChips = PTOK.map(function (w) { var c = el('div', 'chip in', w); chipsBox.appendChild(c); return c; });
+  var outChips = STEPS.map(function (s) { var c = el('div', 'chip out', s.end ? 'stop' : s.tok); chipsBox.appendChild(c); return c; });
+
+  var rowsBox = $('rows');
+  var rows = [0, 1, 2, 3].map(function () {
+    var r = el('div', 'row');
+    var tok = el('div', 'tok'); var track = el('div', 'track'); var fill = el('div', 'fill'); track.appendChild(fill);
+    var pct = el('div', 'pct'); var badge = el('div', 'badge', 'PICKED');
+    r.appendChild(tok); r.appendChild(track); r.appendChild(pct); r.appendChild(badge);
+    rowsBox.appendChild(r);
+    return { r: r, tok: tok, fill: fill, pct: pct, badge: badge };
+  });
+
+  var flowBox = $('flow');
+  var flowItems = ['Prompt', 'Tokens', 'Predict', 'Repeat'].map(function (l, i, arr) {
+    var item = el('div', 'flow-item');
+    var last = i === arr.length - 1;
+    var box = el('div', 'flow-box', l);
+    box.style.background = last ? 'var(--or-bg)' : 'var(--blue-bg)';
+    box.style.color = last ? 'var(--or)' : 'var(--blue)';
+    box.style.borderColor = last ? 'var(--or-bd)' : 'var(--blue-bd)';
+    item.appendChild(box);
+    if (!last) item.insertAdjacentHTML('beforeend', ARROW);
+    flowBox.appendChild(item);
+    return item;
+  });
+
+  var takeBox = $('takeaways');
+  var takes = TAKEAWAYS.map(function (t, i) {
+    var row = el('div', 'take'); row.appendChild(el('div', 'num-dot', String(i + 1))); row.appendChild(el('div', '', t));
+    takeBox.appendChild(row); return row;
+  });
+
+  var chapBox = $('chapters');
+  var chapBtns = CHAPTERS.map(function (c) {
+    var b = el('button', 'chap', c[0]);
+    b.addEventListener('click', function () { seekTo(c[1]); });
+    chapBox.appendChild(b); return b;
+  });
+
+  // ---------- Render one moment in time ----------
+  function show(e, op, ty, sc) {
+    e.style.opacity = op;
+    e.style.transform = 'translateY(' + (ty || 0) + 'px) scale(' + (sc == null ? 1 : sc) + ')';
+  }
+
+  function render(T) {
+    // Header step label
+    var label = 'Intro';
+    if (T >= 5000) label = 'Step 1 · Prompt';
+    if (T >= 12000) label = 'Step 2 · Tokenize';
+    if (T >= T0) label = 'Step 3 · Predict & repeat';
+    if (T >= SUMMARY) label = 'Step 4 · Token bill';
+    setText($('stepLabel'), label);
+
+    // Prompt typing
+    var n = Math.max(0, Math.min(PROMPT.length, Math.floor((T - 6000) / 110)));
+    setText($('promptText'), PROMPT.slice(0, n));
+    $('ph').style.display = n === 0 ? '' : 'none';
+    var sent = T >= 9800;
+    $('caret').style.opacity = (!sent && T >= 5000 && Math.floor(T / 450) % 2 === 0) ? 1 : 0;
+    $('promptBox').style.borderColor = sent ? 'var(--blue)' : '#C9D2DD';
+    $('sent').style.opacity = f(T, 9800, 300);
+
+    // Input chips
+    var inputCount = 0;
+    inChips.forEach(function (c, i) {
+      var at = 12000 + i * 450, e = f(T, at, 400);
+      if (T >= at) inputCount++;
+      show(c, e, -14 * (1 - e), 0.92 + 0.08 * e);
+    });
+
+    // Output chips
+    var outputCount = 0, k = -1;
+    STEPS.forEach(function (s, i) {
+      var st = stepStart(i), du = stepDur(i), land = st + 0.6 * du, c = outChips[i];
+      if (T >= st) k = i;
+      if (T >= land) {
+        if (!s.end) outputCount++;
+        c.className = 'chip ' + (s.end ? 'stop' : 'out');
+        setText(c, s.end ? 'stop' : s.tok);
+        show(c, 1, 0, 1 + 0.15 * (1 - f(T, land, 320)));
+      } else if (T >= st) {
+        c.className = 'chip ghost';
+        setText(c, '?');
+        var g = f(T, st, 250);
+        show(c, g, -8 * (1 - g), 1);
+      } else {
+        c.className = 'chip out';
+        setText(c, s.end ? 'stop' : s.tok);
+        show(c, 0, -14, 0.92);
+      }
+    });
+    setText($('inCount'), String(inputCount));
+    setText($('outCount'), String(outputCount));
+    setText($('totCount'), String(inputCount + outputCount));
+
+    // Prediction bars + model
+    var generating = T >= T0 && T < GEN_END;
+    var thinking = false, landing = false, modelState = T >= 12000 ? 'reading tokens' : 'waiting';
+    var barsTitle = 'Next-token guesses';
+    $('wait').style.opacity = k < 0 ? 1 : 0;
+    if (k < 0) {
+      rows.forEach(function (r) { r.r.style.opacity = 0; });
+    } else {
+      var st = stepStart(k), du = stepDur(k), local = Math.min(T - st, du), pickAt = 0.38 * du;
+      var picked = local >= pickAt, s = STEPS[k];
+      thinking = generating && !picked;
+      landing = generating && local >= 0.6 * du && local < 0.9 * du;
+      barsTitle = s.end ? 'Is the answer finished?' : 'Guessing output token #' + (k + 1);
+      modelState = T >= GEN_END ? 'done' : (picked ? 'picked one' : 'thinking…');
+      rows.forEach(function (r, j) {
+        var cand = s.c[j], win = j === 0;
+        var grow = f(local, 200 + j * 120, 650);
+        var appear = f(local, 150, 200);
+        var fade = (!win && picked) ? 1 - 0.6 * f(local, pickAt, 250) : 1;
+        r.r.style.opacity = appear * fade;
+        r.r.classList.toggle('win', win && picked);
+        setText(r.tok, cand[0]);
+        r.fill.style.width = (Math.max(cand[1], 2) * grow) + '%';
+        setText(r.pct, local >= 200 + j * 120 ? Math.round(cand[1] * grow) + '%' : '');
+        r.badge.style.opacity = win ? f(local, pickAt, 250) : 0;
+      });
+    }
+    setText($('barsTitle'), barsTitle);
+    setText($('modelState'), modelState);
+    $('model').classList.toggle('thinking', thinking);
+    $('loop').style.opacity = 0.25 + 0.75 * f(T, T0, 300);
+    $('loop').classList.toggle('landing', landing);
+
+    // Caption
+    var cap = CAPTIONS[0], i;
+    for (i = 0; i < CAPTIONS.length; i++) if (T >= CAPTIONS[i][0]) cap = CAPTIONS[i];
+    setText($('caption'), cap[1]);
+    $('caption').style.color = 'rgba(255,255,255,' + (0.15 + 0.85 * f(T, cap[0], 300)) + ')';
+
+    // Title layer
+    var tl = $('titleLayer'), to = 1 - f(T, 4600, 500);
+    tl.style.opacity = to; tl.style.visibility = to <= 0 ? 'hidden' : 'visible';
+    flowItems.forEach(function (it, i) { var e = f(T, 1200 + i * 550, 400); show(it, e, 10 * (1 - e), 1); });
+
+    // Summary layer
+    var sl = $('sumLayer'), so = f(T, SUMMARY, 500);
+    sl.style.opacity = so; sl.style.visibility = so <= 0 ? 'hidden' : 'visible';
+    var e1 = f(T, 45000, 400), e2 = f(T, 45800, 400), e3 = f(T, 46800, 400);
+    show($('tile1'), e1, -14 * (1 - e1), 0.92 + 0.08 * e1);
+    show($('tile2'), e2, -14 * (1 - e2), 0.92 + 0.08 * e2);
+    show($('tile3'), e3, -14 * (1 - e3), 0.92 + 0.08 * e3);
+    $('plus').style.opacity = e2; $('equals').style.opacity = e3;
+    takes.forEach(function (t, i) { var e = f(T, 48300 + i * 1300, 400); t.style.opacity = e; t.style.transform = 'translateX(' + (-14 * (1 - e)) + 'px)'; });
+    $('note').style.opacity = f(T, 52500, 400);
+
+    // Controls
+    var active = 0;
+    CHAPTERS.forEach(function (c, i) { if (T >= c[1]) active = i; });
+    chapBtns.forEach(function (b, i) { b.classList.toggle('active', i === active); });
+    if (!seeking) $('seek').value = T;
+    setText($('time'), fmt(T) + ' / ' + fmt(TOTAL));
+  }
+
+  // ---------- Playback ----------
+  var params = new URLSearchParams(location.search);
+  var recordMode = params.has('record');
+  if (recordMode) document.body.classList.add('record');
+  var t = 0, playing = !recordMode, last = performance.now(), seeking = false;
+
+  function setPlaying(p) {
+    playing = p;
+    if (playing && t >= TOTAL) t = 0;
+    last = performance.now();
+    $('playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+  }
+  function seekTo(ms) { t = Math.max(0, Math.min(TOTAL, ms)); last = performance.now(); render(t); }
+
+  $('playBtn').addEventListener('click', function () { setPlaying(!playing); });
+  $('restartBtn').addEventListener('click', function () { t = 0; setPlaying(true); });
+  var seek = $('seek');
+  seek.addEventListener('input', function () { seeking = true; seekTo(Number(seek.value)); });
+  seek.addEventListener('change', function () { seeking = false; });
+  $('fsBtn').addEventListener('click', toggleFs);
+  function toggleFs() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.target && e.target.tagName === 'INPUT' && e.key !== ' ') return;
+    if (e.key === ' ' || e.key === 'k') { e.preventDefault(); setPlaying(!playing); }
+    else if (e.key === 'r' || e.key === 'R') { t = 0; setPlaying(true); }
+    else if (e.key === 'f' || e.key === 'F') { toggleFs(); }
+    else if (e.key === 'ArrowRight') { seekTo(t + 5000); }
+    else if (e.key === 'ArrowLeft') { seekTo(t - 5000); }
+  });
+
+  // Scale the 1280x720 stage to fit any screen
+  function fit() {
+    var s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    $('stage').style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  function frame(now) {
+    var dt = now - last; last = now;
+    if (playing) {
+      t += dt;
+      if (t >= TOTAL) { t = TOTAL; setPlaying(false); }
+    }
+    render(t);
+    requestAnimationFrame(frame);
+  }
+  setPlaying(playing);
+  render(0);
+  requestAnimationFrame(frame);
+
+  // Used only when rendering the MP4 video
+  window.__renderAt = function (ms) { playing = false; t = ms; render(ms); };
+  window.__TOTAL = TOTAL;
+})();
+</script>
+</body>
+</html>
