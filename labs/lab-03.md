@@ -30,42 +30,63 @@ Your professor will demonstrate how to create a private repository and add your 
      - Add a new line
      - Modify punctuation or structure
    - Save your version with your name (e.g., `group_poem_alex.txt`)
+  
 
 3. **Manual Merge Attempt**
    - Now try to combine both modified versions into one final `group_poem_final.txt`
    - Work together to create the "best" version
 
+     Final: Roses are pink,
+            Violets are blue,
+            Programming is awesome,
+            And technology too!!!
+            We are learning Git today,
+
 ### Part B: System Design Challenge
 
 4. **Problem Analysis**
-   - Discuss what problems you encountered in Part A:
-     - Were changes overwritten or lost?
-     - How did you decide which changes to keep?
-     - What if you had 5 people instead of 2?
-     - How would you track who made which changes?
+   - Discuss what problems you encountered in Part A: When we were both editing at the same time, our work overlapped. It was hard to tell who wrote what without actually talking to each other.
+     - Were changes overwritten or lost? Yes. When we tried to manually copy-paste everything into one file, some punctuation and a few lines got replaced and lost.
+     - How did you decide which changes to keep? We went through it line-by-line and just talked it out to agree on which version sounded better.
+     - What if you had 5 people instead of 2? It would be a complete mess. If we tried to track everything through emails or chat, we'd definitely lose a lot of work.
+     - How would you track who made which changes? We can't really track it right now. The only way is to manually write our names next to the sentences we wrote.
 
 5. **Design Your Solution**
    - Draw a diagram of how your version control system would work
    - Your system must address these requirements:
-     - How do you store different versions?
-     - How do you track who made changes?
-     - How do you handle conflicts when two people edit the same line?
-     - How do you name/identify different versions?
-     - How do you describe what changed in each version?
-     - How do you prevent people from overwriting each other's work?
+     - How do you store different versions? We store everything on a central cloud server that keeps a full timeline of every save.
+
+     - How do you track who made changes? The system automatically tags each change with the person's username and the time they made it.
+
+     - How do you handle conflicts when two people edit the same line? It stops the save, highlights the conflicting line in red, and makes you manually choose which version to keep.
+
+      - How do you name/identify different versions? It uses automatic version numbers like v1.0, v1.1, v1.2 instead of us naming them manually.
+
+      - How do you describe what changed in each version? You have to write a short one-sentence summary of what you changed before it will let you save.
+
+      - How do you prevent people from overwriting each other's work? It won't let you upload your work until you first download the latest changes from your teammates and merge them in.
 
 ### Part C: Document Your Solution
 
 - Create a clean diagram of your version control system on paper
-- Write a brief explanation (3-4 sentences) of how your system works
-- List the top 3 problems from Part A that your system solves
+
+- Write a brief explanation (3-4 sentences) of how your system works : Our system uses a central cloud server that saves every version of a file one after another, each with its own version number. When someone edits a file, it automatically tags their username next to the lines they changed and asks them to write a short note about what they did. If two people edit the same exact line, the system shows an error and makes you manually review it before saving.
+
+- List the top 3 problems from Part A that your system solves :
+1. Blind Overwriting: It stops teammates from accidentally erasing each other's work without any warning.
+2. Lack of Tracking: You always know who wrote what because every line is tagged with the author's name.
+3. History Confusion: You don't have to guess what was changed, because every update has a short written description.
+
 - Deliverable: Submit your diagram and explanation to the instructor
 
 ### Wrap Up Quesion...
-- What was the most frustrating part of the collaboration chaos?
-- Which problem from Part A does your system design solve best?
-- What would happen if 10 people tried to collaborate this way?
-- How does your design handle someone accidentally deleting the file?
+- What was the most frustrating part of the collaboration chaos? Not being able to communicate while editing. Merging everything into one final file was confusing and we kept overwriting each other.
+  
+- Which problem from Part A does your system design solve best? It best solves line conflicts. Instead of hunting for overlapping changes manually, the system flags them automatically.
+  
+- What would happen if 10 people tried to collaborate this way? Doing it manually would be impossible. People would accidentally delete files and overwrite each other's code, it would be total chaos.
+  
+- How does your design handle someone accidentally deleting the file? Since all versions are saved on the central server, you can just go back in the history and restore the previous version right away.
 
 ---
 
