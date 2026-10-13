@@ -7,3 +7,5 @@
 ## Useful Links
 - [Course website]
 - [Library resources]
+
+Form study groups with classmates
