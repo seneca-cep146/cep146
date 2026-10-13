@@ -37,7 +37,7 @@
 
 ## Study Tips
 - Take notes during lectures
-- Review material weekly
+- Review material weekl
 - Practice programming every day to improve coding skills.
 
 
