@@ -35,6 +35,10 @@
 
 * [Essential Git Commands and Terms](GIt_Command_Terms.md)
 
+## Study Tips
+- Take notes during lectures
+- Review material weekly
+- Practice programming every day to improve coding skills.
 
 
 
