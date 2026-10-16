@@ -36,6 +36,7 @@
 * [Essential Git Commands and Terms](GIt_Command_Terms.md)
 
 
-
+## Study tips
+- Practice Git commands regularly to improve version control skills.
 
 
